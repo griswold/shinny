@@ -4,18 +4,19 @@ class Scraper
 
   def update_rinks
     schedule = Nokogiri::HTML(fetch_full_schedule)
-    changed = 0
-    schedule.css(".pfrProgramDescrList.dropinbox h4 a").each do |link|
+    created = 0
+    links = schedule.css(".pfrProgramDescrList.dropinbox h4 a")
+    links.each do |link|
       rink_name = link.text.squish
       logger.info "Processing rink: #{rink_name}"
       rink = Rink.find_by_name(rink_name)
       if rink.nil?
         logger.info "\t=> Creating rink: #{rink_name}"
         Rink.create!(name: rink_name, url: link.attr("href"))
-        changed += 1
+        created += 1
       end
     end
-    puts "Created #{changed} rinks"
+    logger.info "Processed #{links.size} rinks. Created #{created}"
   end
 
   private
