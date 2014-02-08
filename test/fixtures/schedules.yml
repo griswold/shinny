@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  rink_id: 
+  activity_id: 
+  age_group_id: 
+  start: 2014-02-08 16:50:10
+  end: 2014-02-08 16:50:10
+
+two:
+  rink_id: 
+  activity_id: 
+  age_group_id: 
+  start: 2014-02-08 16:50:10
+  end: 2014-02-08 16:50:10
