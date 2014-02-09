@@ -1,0 +1,8 @@
+<h1>Rinks</h1>
+<ul class="list-unstyled">
+  <% @rinks.each do |rink| %>
+  	<li>
+      <%= link_to rink.name, rink.url %>
+    </li>
+  <% end %>
+</ul>
