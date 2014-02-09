@@ -28,7 +28,7 @@
   </tr>
   <% @scheduled_activities.each do |activity| %>
     <tr>
-      <td><%= activity.rink.name %></td>
+      <td><%= link_to activity.rink.name, activity.rink.url %></td>
       <td><%= activity.start_time.to_s(:short) %> - <%= activity.end_time.to_s(:time) %></td>
       <td><%= link_to "link", activity.rink.url, target: "_blank" %> <%= [activity.age_range, activity.gender_text].compact.join("; ") %></td>
     </tr>
