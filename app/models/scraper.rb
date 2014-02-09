@@ -4,6 +4,8 @@ class Scraper
 
   HOST = "http://www1.toronto.ca"
 
+  class ScheduleEntry < Struct.new(:label, :start_date, :end_date); end
+
   def update_rinks
     schedule = Nokogiri::HTML(fetch_full_schedule)
     created = 0
@@ -21,9 +23,11 @@ class Scraper
     logger.info "Processed #{links.size} rinks. Created #{created}"
   end
 
-  def extract_activity_instances(activity_table_html)
+  def extract_schedule_entries(activity_table_html)
     doc = Nokogiri::HTML(activity_table_html)
     schedule_tables = doc.css('tr[id^="dropin_Skating_"] table')
+
+    schedule_entries = []
 
     schedule_tables.each do |table|
       date_for_column_index = {}
@@ -43,14 +47,13 @@ class Scraper
         activity_name = row_cols[0].text.squish
 
         row.css("td")[1..-1].each_with_index do |cell, index|
-          puts "#{activity_name}: #{cell.text.squish}"
+          next if cell.text.blank?
+          schedule_entries << ScheduleEntry.new(activity_name, cell.text, nil)
         end
       end
     end
 
-
-
-    []
+    schedule_entries
   end
 
   private

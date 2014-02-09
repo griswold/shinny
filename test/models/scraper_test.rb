@@ -7,7 +7,7 @@ class ScraperTest < ActiveSupport::TestCase
   end
 
   def test_extract_activity_instances
-    instances = @scraper.extract_activity_instances(rink_activity_table)
+    schedule_entries = @scraper.extract_scheduled_activities(rink_activity_table)
     assert_contains_instance "Public Skate", "2014-02-09 14:30:00", "2014-02-09 18:00:00", instances
   end
 
