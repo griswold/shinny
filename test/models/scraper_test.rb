@@ -8,7 +8,6 @@ class ScraperTest < ActiveSupport::TestCase
 
   def test_extract_schedule_entries
     entries = @scraper.extract_schedule_entries(rink_activity_table)
-    entries.each{ |e| puts e }
     assert_contains_entry "Public Skate", "2014-02-09 12:30:00", "2014-02-09 18:00:00", entries
     assert_contains_entry "Shinny: Girls (6 - 12yrs)", "2014-02-14 17:00:00", "2014-02-14 18:00:00", entries
   end
