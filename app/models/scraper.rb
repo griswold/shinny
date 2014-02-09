@@ -21,6 +21,28 @@ class Scraper
     logger.info "Processed #{links.size} rinks. Created #{created}"
   end
 
+  def extract_activity_instances(activity_table_html)
+    doc = Nokogiri::HTML(activity_table_html)
+    schedule_tables = doc.css('tr[id^="dropin_Skating_"] table')
+
+    date_for_column_index = {}
+    schedule_tables.each do |table|
+      table.css("thead tr th").each_with_index do |cell, index|
+        date = begin
+          Date.parse(cell.text)
+        rescue ArgumentError => e
+          nil
+        end
+
+        date_for_column_index[index] = date
+      end
+    end
+
+    
+
+    []
+  end
+
   private
 
   def fetch_full_schedule

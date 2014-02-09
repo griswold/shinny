@@ -1,8 +1,9 @@
 <h1>Rinks</h1>
-<ul class="list-unstyled">
+<table class="table">
   <% @rinks.each do |rink| %>
-  	<li>
-      <%= link_to rink.name, rink.url %>
-    </li>
+    <tr>
+      <th><%= rink.id %></th>
+      <td><%= rink.name %> &mdash; <%= link_to "source", rink.url, target: "_blank" %></td>
+    </tr>
   <% end %>
-</ul>
+</table>
