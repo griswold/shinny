@@ -1,4 +1,5 @@
 class ScheduledActivity < ActiveRecord::Base
+
   MALE = "M"
   FEMALE = "F"
 
@@ -10,6 +11,10 @@ class ScheduledActivity < ActiveRecord::Base
 
   def self.conflict_exists?(activity)
     where(rink: activity.rink, start_time: activity.start_time..activity.end_time).any?
+  end
+
+  def gender_text
+    { MALE => "Male only", FEMALE => "Female only" }[gender]
   end
 
   def age_range

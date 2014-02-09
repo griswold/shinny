@@ -1,26 +1,26 @@
+<h1><%= @activity.name %></h1>
+
 <div class="panel">
-  <%= form_tag(scheduled_activities_path, method: "GET") do  %>
+  <form action="<%= scheduled_activities_path %>" method="GET">
     <p>
       What do you want to do?
-      <%= select_tag("activity_id", options_from_collection_for_select(@activities, "id", "name", @activity)) %>
+      <%= select_tag("activity_id", options_from_collection_for_select(@activities, "id", "name", @activity.id)) %>
     </p>
     <%= submit_tag "Update" %>
-  <% end %>
+  </form>
 </div>
 
 <table class="table">
   <tr>
     <th>Rink</th>
     <th>Time</th>
-    <th>Gender</th>
-    <th>Ages</th>
+    <th>More</th>
   </tr>
   <% @scheduled_activities.each do |activity| %>
     <tr>
       <td><%= activity.rink.name %></td>
       <td><%= activity.start_time.to_s(:short) %> - <%= activity.end_time.to_s(:time) %></td>
-      <td><%= activity.gender %></td>
-      <td><%= activity.age_range %></td>
+      <td><%= link_to "link", activity.rink.url, target: "_blank" %> <%= [activity.age_range, activity.gender_text].compact.join("; ") %></td>
     </tr>
   <% end %>
 
