@@ -8,19 +8,12 @@ class Scraper
     @time_range_parser = TimeRangeParser.new
   end
 
-  class ScheduleEntry < Struct.new(:label, :start_time, :end_time)
-    def to_s
-      %Q(#{label.inspect}: #{start_time.strftime("%Y-%m-%d %H:%M:%S")} - #{end_time.strftime("%Y-%m-%d %H:%M:%S")})
-    end
-  end
-
   def update_rinks
     schedule = Nokogiri::HTML(fetch_full_schedule)
     created = 0
     links = schedule.css(".pfrProgramDescrList.dropinbox h4 a")
     links.each do |link|
       rink_name = link.text.squish
-      logger.info "Processing rink: #{rink_name}"
       rink = Rink.find_by_name(rink_name)
       if rink.nil?
         logger.info "\t=> Creating rink: #{rink_name}"
@@ -56,7 +49,6 @@ class Scraper
 
         row_cols.each_with_index do |cell, index|
           next if index == 0
-          puts "processing #{activity_name}: #{cell.text}"
           next if cell.text.blank?
           date = date_for_column_index[index]
           if date.nil?

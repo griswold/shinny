@@ -8,9 +8,6 @@ class ScraperTest < ActiveSupport::TestCase
 
   def test_extract_schedule_entries
     entries = @scraper.extract_schedule_entries(rink_activity_table)
-    entries.each do |entry|
-      puts entry
-    end
     assert_contains_instance "Public Skate", "2014-02-09 14:30:00", "2014-02-09 18:00:00", entries
     assert_contains_instance "Shinny: Girls", "2014-02-14 17:00:00", "2014-02-14 18:00:00", entries
   end
@@ -34,15 +31,12 @@ class ScraperTest < ActiveSupport::TestCase
   def assert_contains_instance(name, start_time_str, end_time_str, schedule_entries)
     start_time = Time.parse(start_time_str)
     end_time = Time.parse(end_time_str)
-    matches = schedule_entries.any? do |se|
-      se.label == name &&
-      se.start_time == strftime(start_time) &&
-      se.end_time == strftime(end_time)
-    end
-    entries_with_same_label = schedule_entries.select{ |e| e.label == name }.sort_by(&:start_time)
+    entry = ScheduleEntry.new(name, start_time, end_time)
+    matches = schedule_entries.include?(entry)
+    entries_with_same_label = schedule_entries.select{ |e| entry.label }.sort_by(&:start_time)
     assert matches, <<-EOD
-      Expected to find #{name} from #{start_time_str} to #{end_time_str} but didn't!"
-        matches with same label:
+      Expected to find entry matching #{entry} but didn't.
+      Entries with same label:
         #{entries_with_same_label.map(&:to_s).join("\n")}
     EOD
   end
