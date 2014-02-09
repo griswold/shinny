@@ -29,7 +29,6 @@ class ScheduleEntryProcessorTest < ActiveSupport::TestCase
     assert_nil sa.gender
   end
 
-
   private
 
   def entry(label, start_time=Time.now, end_time=Time.now)

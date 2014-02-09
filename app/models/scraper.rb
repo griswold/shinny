@@ -6,6 +6,7 @@ class Scraper
 
   def initialize
     @time_range_parser = TimeRangeParser.new
+    @schedule_entry_processor = ScheduleEntryProcessor.new
   end
 
   def update_rinks
@@ -29,7 +30,14 @@ class Scraper
     rink_detail_page = open(rink.url){ |f| f.read }
     schedule = Nokogiri::HTML(rink_detail_page).css("#pfrComplexTabs-dropin").to_html
     schedule_entries = extract_schedule_entries(schedule)
-    schedule_entries.each{ |e| puts e }
+    schedule_entries.each do |entry|
+      scheduled_activity = @schedule_entry_processor.process(rink, entry)
+      if ScheduledActivity.conflict_exists?(scheduled_activity)
+        Rails.logger.info("Already have activity for this slot...skipping #{scheduled_activity}")
+      elsif !scheduled_activity.save
+        Rails.logger.error("Error saving activity: #{scheduled_activity}: #{scheduled_activity.errors.full_messages}")
+      end
+    end
   end
 
   def extract_schedule_entries(activity_table_html)
