@@ -31,4 +31,8 @@ class ScheduledActivity < ActiveRecord::Base
     end
   end
 
+  def address
+    rink.address
+  end
+
 end

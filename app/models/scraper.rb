@@ -31,11 +31,12 @@ class Scraper
     rink_detail_page = Nokogiri::HTML(raw_rink_detail_page)
 
     rink_location = rink_detail_page.css(".pfrComplexLocation li:first").text
-    begin
-      latitude, longitude = Geocoding.geocode(rink_location)
-      rink.update_attributes(address: rink_location, latitude: latitude, longitude: longitude)
-    rescue Exception => e
-      Rails.logger.error "Error getting lat/lon for #{rink.name}: #{e.message}"
+    geocode_result = Geocoder.search(rink_location).first
+
+    if geocode_result
+      rink.update_attributes(address: rink_location, latitude: geocode_result.latitude, longitude: geocode_result.longitude)
+    else
+      Rails.logger.error "Error getting lat/lon for #{rink.name} at #{rink_location}"
     end
 
     schedule = rink_detail_page.css("#pfrComplexTabs-dropin").to_html
