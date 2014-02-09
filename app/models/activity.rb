@@ -9,7 +9,7 @@ class Activity < ActiveRecord::Base
     all.map do |activity|
       words = activity.name.squish.downcase.split(/\s+/)
       [activity, (words & arg_words).size]
-    end.sort_by(&:last).first.try(:first)
+    end.sort_by(&:last).last.try(:first)
   end
 
 end

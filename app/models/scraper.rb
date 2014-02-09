@@ -27,8 +27,18 @@ class Scraper
 
   def update_rink_details(rink_id)
     rink = Rink.find(rink_id)
-    rink_detail_page = open(rink.url){ |f| f.read }
-    schedule = Nokogiri::HTML(rink_detail_page).css("#pfrComplexTabs-dropin").to_html
+    raw_rink_detail_page = open(rink.url){ |f| f.read }
+    rink_detail_page = Nokogiri::HTML(raw_rink_detail_page)
+
+    rink_location = rink_detail_page.css(".pfrComplexLocation li:first").text
+    begin
+      latitude, longitude = Geocoding.geocode(rink_location)
+      rink.update_attributes(address: rink_location, latitude: latitude, longitude: longitude)
+    rescue Exception => e
+      Rails.logger.error "Error getting lat/lon for #{rink.name}: #{e.message}"
+    end
+
+    schedule = rink_detail_page.css("#pfrComplexTabs-dropin").to_html
     schedule_entries = extract_schedule_entries(schedule)
     schedule_entries.each do |entry|
       scheduled_activity = @schedule_entry_processor.process(rink, entry)

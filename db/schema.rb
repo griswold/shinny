@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140209210518) do
+ActiveRecord::Schema.define(version: 20140209223405) do
 
   create_table "activities", force: true do |t|
     t.string   "name"
@@ -21,23 +21,23 @@ ActiveRecord::Schema.define(version: 20140209210518) do
 
   add_index "activities", ["name"], name: "index_activities_on_name", unique: true
 
-  create_table "geocodings", force: true do |t|
+  create_table "cached_geocodings", force: true do |t|
     t.string   "text"
-    t.decimal  "latitude"
-    t.decimal  "longitude"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "response"
   end
 
-  add_index "geocodings", ["text"], name: "index_geocodings_on_text", unique: true
+  add_index "cached_geocodings", ["text"], name: "index_cached_geocodings_on_text", unique: true
 
   create_table "rinks", force: true do |t|
     t.string   "name"
-    t.decimal  "lat"
-    t.decimal  "lon"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
     t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "address"
   end
 
   add_index "rinks", ["name"], name: "index_rinks_on_name", unique: true
@@ -53,6 +53,8 @@ ActiveRecord::Schema.define(version: 20140209210518) do
     t.integer  "end_age"
     t.string   "gender"
     t.string   "original_label"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
   end
 
   add_index "scheduled_activities", ["start_time"], name: "index_scheduled_activities_on_start_time"

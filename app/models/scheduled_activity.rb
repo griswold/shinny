@@ -9,6 +9,8 @@ class ScheduledActivity < ActiveRecord::Base
   validates :gender, inclusion: { in: [MALE, FEMALE, nil] }
   validates :activity, :rink, :start_time, :end_time, presence: true
 
+  geocoded_by :address
+
   def self.conflict_exists?(activity)
     where(rink: activity.rink, start_time: activity.start_time..activity.end_time).any?
   end
