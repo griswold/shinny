@@ -1,0 +1,17 @@
+<table class="table">
+  <tr>
+    <th>Rink</th>
+    <th>Time</th>
+    <th>Gender</th>
+    <th>Ages</th>
+  </tr>
+  <% @scheduled_activities.each do |activity| %>
+    <tr>
+      <td><%= activity.rink.name %></td>
+      <td><%= activity.start_time.to_s(:short) %> - <%= activity.end_time.to_s(:time) %></td>
+      <td><%= activity.gender %></td>
+      <td><%= activity.age_range %></td>
+    </tr>
+  <% end %>
+
+</table>
