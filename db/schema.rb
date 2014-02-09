@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140209193609) do
+ActiveRecord::Schema.define(version: 20140209193737) do
 
   create_table "activities", force: true do |t|
     t.string   "name"
@@ -43,12 +43,14 @@ ActiveRecord::Schema.define(version: 20140209193609) do
   create_table "scheduled_activities", force: true do |t|
     t.integer  "rink_id"
     t.integer  "activity_id"
-    t.datetime "start"
-    t.datetime "end"
+    t.datetime "start_time"
+    t.datetime "end_time"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "start_age"
     t.integer  "end_age"
   end
+
+  add_index "scheduled_activities", ["start_time"], name: "index_scheduled_activities_on_start_time"
 
 end
