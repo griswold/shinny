@@ -24,6 +24,14 @@ class Scraper
     logger.info "Processed #{links.size} rinks. Created #{created}"
   end
 
+  def update_rink_details(rink_id)
+    rink = Rink.find(rink_id)
+    rink_detail_page = open(rink.url){ |f| f.read }
+    schedule = Nokogiri::HTML(rink_detail_page).css("#pfrComplexTabs-dropin").to_html
+    schedule_entries = extract_schedule_entries(schedule)
+    schedule_entries.each{ |e| puts e }
+  end
+
   def extract_schedule_entries(activity_table_html)
     doc = Nokogiri::HTML(activity_table_html)
     schedule_tables = doc.css('tr[id^="dropin_Skating_"] table')
