@@ -45,7 +45,7 @@ class Scraper
       table.css("tbody tr").each do |row|
         row_cols = row.css("td")
         next unless row_cols.size == date_for_column_index.size
-        activity_name = row_cols[0].text.squish
+        activity_name = row_cols[0].text.squish.gsub(/(\w)\(/, '\1 (')
 
         row_cols.each_with_index do |cell, index|
           next if index == 0
