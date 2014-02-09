@@ -1,5 +1,9 @@
 class Activity < ActiveRecord::Base
 
+  def self.default
+    first
+  end
+
   def self.recognize(string)
     arg_words = string.squish.downcase.split(/\s+/)
     all.map do |activity|

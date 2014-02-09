@@ -1,3 +1,13 @@
+<div class="panel">
+  <%= form_tag(scheduled_activities_path, method: "GET") do  %>
+    <p>
+      What do you want to do?
+      <%= select_tag("activity_id", options_from_collection_for_select(@activities, "id", "name", @activity)) %>
+    </p>
+    <%= submit_tag "Update" %>
+  <% end %>
+</div>
+
 <table class="table">
   <tr>
     <th>Rink</th>

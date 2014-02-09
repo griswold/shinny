@@ -12,10 +12,6 @@ class ScheduledActivity < ActiveRecord::Base
     where(rink: activity.rink, start_time: activity.start_time..activity.end_time).any?
   end
 
-  def self.search(start_time, end_time)
-    where(end_time: start_time..end_time).order("start_time asc").limit(20).includes(:rink, :activity)
-  end
-
   def age_range
     if start_age && end_age
       [start_age, end_age].join(" - ")
