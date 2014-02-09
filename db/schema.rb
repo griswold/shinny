@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140209195300) do
+ActiveRecord::Schema.define(version: 20140209210518) do
 
   create_table "activities", force: true do |t|
     t.string   "name"
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 20140209195300) do
   end
 
   add_index "activities", ["name"], name: "index_activities_on_name", unique: true
+
+  create_table "geocodings", force: true do |t|
+    t.string   "text"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "geocodings", ["text"], name: "index_geocodings_on_text", unique: true
 
   create_table "rinks", force: true do |t|
     t.string   "name"
