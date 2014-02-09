@@ -3,10 +3,20 @@
 <div class="panel">
   <form action="<%= scheduled_activities_path %>" method="GET">
     <p>
-      What do you want to do?
+      <%= label_tag "activity_id", "What do you want do?" %>
       <%= select_tag("activity_id", options_from_collection_for_select(@activities, "id", "name", @activity.id)) %>
     </p>
-    <%= submit_tag "Update" %>
+    <p>
+      <%= label_tag "location", "Where?" %>
+      <%= text_field_tag "location" %>
+    </p>
+    <p>
+      <%= label_tag "time", "When?" %>
+      <%= text_field_tag "time", "now" %>
+    </p>
+    <p>
+      <%= submit_tag "Update" %>
+    </p>
   </form>
 </div>
 
