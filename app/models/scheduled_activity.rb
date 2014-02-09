@@ -17,13 +17,13 @@ class ScheduledActivity < ActiveRecord::Base
     { MALE => "Male only", FEMALE => "Female only" }[gender]
   end
 
-  def age_range
+  def age_range_text
     if start_age && end_age
-      [start_age, end_age].join(" - ")
+      "Ages " + [start_age, end_age].join(" - ")
     elsif start_age
-      "#{start_age}+"
+      "Ages #{start_age}+"
     elsif end_age
-      "Up to #{end_age}"
+      "Up to age #{end_age}"
     else
       nil
     end

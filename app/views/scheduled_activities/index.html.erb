@@ -12,7 +12,8 @@
     </p>
     <p>
       <%= label_tag "time", "When?" %>
-      <%= text_field_tag "time", "now" %>
+      <%= text_field_tag "date", @date %>
+      <%= text_field_tag "time", @time.to_s(:time) %>
     </p>
     <p>
       <%= submit_tag "Update" %>
@@ -29,8 +30,10 @@
   <% @scheduled_activities.each do |activity| %>
     <tr>
       <td><%= link_to activity.rink.name, activity.rink.url %></td>
-      <td><%= activity.start_time.to_s(:short) %> - <%= activity.end_time.to_s(:time) %></td>
-      <td><%= link_to "link", activity.rink.url, target: "_blank" %> <%= [activity.age_range, activity.gender_text].compact.join("; ") %></td>
+      <td>
+        <%= activity.start_time.to_s(:short) %> - <%= activity.end_time.to_s(:time) %>
+      </td>
+      <td class="secondary"><%= [activity.age_range_text, activity.gender_text].compact.join("; ") %></td>
     </tr>
   <% end %>
 

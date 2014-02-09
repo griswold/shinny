@@ -11,3 +11,10 @@
  *= require_self
  *= require_tree .
  */
+
+.secondary {
+  font-size: 0.8em;
+  color: #999;
+  text-decoration: italic;
+
+}
