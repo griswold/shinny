@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140209194234) do
+ActiveRecord::Schema.define(version: 20140209194412) do
 
   create_table "activities", force: true do |t|
     t.string   "name"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20140209194234) do
     t.datetime "updated_at"
     t.integer  "start_age"
     t.integer  "end_age"
+    t.string   "gender"
   end
 
   add_index "scheduled_activities", ["start_time"], name: "index_scheduled_activities_on_start_time"
