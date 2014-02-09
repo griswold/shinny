@@ -16,8 +16,17 @@
       <%= text_field_tag "time", @time.to_s(:time) %>
     </p>
     <p>
+      <%= label_tag "gender", "Gender" %>
+      <%= select_tag "gender", options_for_select([["", nil], ["Male only", ScheduledActivity::MALE], ["Female only", ScheduledActivity::FEMALE]], @gender) %>
+    </p>
+    <p>
+      <%= label_tag "age", "Age" %>
+      <%= text_field_tag "age", @age %>
+    </p>
+    <p>
       <%= submit_tag "Update" %>
     </p>
+
   </form>
 </div>
 
