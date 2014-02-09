@@ -4,7 +4,11 @@ class Scraper
 
   HOST = "http://www1.toronto.ca"
 
-  class ScheduleEntry < Struct.new(:label, :start_date, :end_date); end
+  class ScheduleEntry < Struct.new(:label, :start_date, :end_date)
+    def to_s
+      "#{label}: #{start_date} - #{end_date}"
+    end
+  end
 
   def update_rinks
     schedule = Nokogiri::HTML(fetch_full_schedule)

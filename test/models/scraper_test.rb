@@ -6,8 +6,11 @@ class ScraperTest < ActiveSupport::TestCase
     @scraper = Scraper.new
   end
 
-  def test_extract_activity_instances
-    schedule_entries = @scraper.extract_scheduled_activities(rink_activity_table)
+  def test_extract_schedule_entries
+    schedule_entries = @scraper.extract_schedule_entries(rink_activity_table)
+    schedule_entries.each do |entry|
+      puts entry
+    end
     assert_contains_instance "Public Skate", "2014-02-09 14:30:00", "2014-02-09 18:00:00", instances
   end
 

@@ -11,20 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140209171600) do
+ActiveRecord::Schema.define(version: 20140209173952) do
 
   create_table "activities", force: true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "activity_instances", force: true do |t|
-    t.integer  "rink_id"
-    t.integer  "activity_id"
-    t.integer  "age_group_id"
-    t.datetime "start"
-    t.datetime "end"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -45,5 +35,15 @@ ActiveRecord::Schema.define(version: 20140209171600) do
   end
 
   add_index "rinks", ["name"], name: "index_rinks_on_name", unique: true
+
+  create_table "scheduled_activities", force: true do |t|
+    t.integer  "rink_id"
+    t.integer  "activity_id"
+    t.integer  "age_group_id"
+    t.datetime "start"
+    t.datetime "end"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
