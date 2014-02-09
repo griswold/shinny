@@ -25,8 +25,8 @@ class Scraper
     doc = Nokogiri::HTML(activity_table_html)
     schedule_tables = doc.css('tr[id^="dropin_Skating_"] table')
 
-    date_for_column_index = {}
     schedule_tables.each do |table|
+      date_for_column_index = {}
       table.css("thead tr th").each_with_index do |cell, index|
         date = begin
           Date.parse(cell.text)
@@ -36,9 +36,19 @@ class Scraper
 
         date_for_column_index[index] = date
       end
+
+      table.css("tbody tr").each do |row|
+        row_cols = row.css("td")
+        next unless row_cols.size == date_for_column_index.size
+        activity_name = row_cols[0].text.squish
+
+        row.css("td")[1..-1].each_with_index do |cell, index|
+          puts "#{activity_name}: #{cell.text.squish}"
+        end
+      end
     end
 
-    
+
 
     []
   end
