@@ -4,6 +4,10 @@ class Scraper
 
   HOST = "http://www1.toronto.ca"
 
+  def initialize
+    @time_range_parser = TimeRangeParser.new
+  end
+
   class ScheduleEntry < Struct.new(:label, :start_date, :end_date)
     def to_s
       "#{label}: #{start_date} - #{end_date}"
@@ -52,7 +56,24 @@ class Scraper
 
         row.css("td")[1..-1].each_with_index do |cell, index|
           next if cell.text.blank?
-          schedule_entries << ScheduleEntry.new(activity_name, cell.text, nil)
+          date = date_for_column_index[index]
+          if date.nil?
+            logger.warn "Do not have date for column index #{index}"
+            next
+          end
+
+          start_time_of_day, end_time_of_day = begin
+            @time_range_parser.parse(cell.text)
+          rescue ArgumentError => e
+            logger.warn("Could not parse time range: #{cell.text}")
+          end
+
+          entry = ScheduleEntry.new(activity_name,
+            # gross!
+            Time.zone.parse("#{date.to_s(:db)} #{start_time_of_day}"),
+            Time.zone.parse("#{date.to_s(:db)} #{end_time_of_day}"))
+
+          schedule_entries << entry
         end
       end
     end
