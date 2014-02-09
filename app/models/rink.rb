@@ -1,3 +1,3 @@
 class Rink < ActiveRecord::Base
-  scope :ordered, order("name asc")
+  scope :ordered, -> { order("name asc") }
 end
