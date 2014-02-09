@@ -2,6 +2,8 @@ require "open-uri"
 
 class Scraper
 
+  HOST = "http://www1.toronto.ca"
+
   def update_rinks
     schedule = Nokogiri::HTML(fetch_full_schedule)
     created = 0
@@ -12,7 +14,7 @@ class Scraper
       rink = Rink.find_by_name(rink_name)
       if rink.nil?
         logger.info "\t=> Creating rink: #{rink_name}"
-        Rink.create!(name: rink_name, url: link.attr("href"))
+        Rink.create!(name: rink_name, url: HOST + link.attr("href"))
         created += 1
       end
     end
@@ -23,7 +25,7 @@ class Scraper
 
   def fetch_full_schedule
     @schedule_html ||= begin
-      url = "http://www1.toronto.ca/parks/prd/skating/dropin/hockey/"
+      url = "#{HOST}/parks/prd/skating/dropin/hockey/"
       logger.info("Fetching schedule from #{url}")
       open(url){ |f| f.read }
     end
