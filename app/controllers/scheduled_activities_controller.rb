@@ -1,7 +1,6 @@
 class ScheduledActivitiesController < ApplicationController
   def index
     @location = params[:location] || "Toronto, ON"
-    latitude, longitude = Geocoding.geocode(@location)
 
     @date = params[:date].present? ? Date.parse(params[:date]) : Date.current
     @time = params[:time].present? ? Time.parse(params[:time]) : Time.zone.now
@@ -11,6 +10,7 @@ class ScheduledActivitiesController < ApplicationController
 
     @gender = params[:gender] if params[:gender].present?
     @age = params[:age].to_i if params[:age].present?
+    @distance = params[:distance].to_i if params[:distance].present?
 
     @activity = params[:activity_id].present? ? Activity.find(params[:activity_id]) : Activity.default
     @activities = Activity.all
@@ -24,6 +24,10 @@ class ScheduledActivitiesController < ApplicationController
     if @age
       @scheduled_activities = @scheduled_activities.where("start_age is null or start_age <= ?", @age)
       @scheduled_activities = @scheduled_activities.where("end_age is null or end_age >= ?", @age)
+    end
+
+    if @distance
+      @scheduled_activities = @scheduled_activities.near(@location, @distance, :units => :km)
     end
   end
 end
