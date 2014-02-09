@@ -8,9 +8,9 @@ class Scraper
     @time_range_parser = TimeRangeParser.new
   end
 
-  class ScheduleEntry < Struct.new(:label, :start_date, :end_date)
+  class ScheduleEntry < Struct.new(:label, :start_time, :end_time)
     def to_s
-      "#{label}: #{start_date} - #{end_date}"
+      %Q(#{label}: #{start_time.strftime("%Y-%m-%d %H:%M:%S")} - #{end_time.strftime("%Y-%m-%d %H:%M:%S")})
     end
   end
 
@@ -54,7 +54,9 @@ class Scraper
         next unless row_cols.size == date_for_column_index.size
         activity_name = row_cols[0].text.squish
 
-        row.css("td")[1..-1].each_with_index do |cell, index|
+        row_cols.each_with_index do |cell, index|
+          next if index == 0
+          puts "processing #{activity_name}: #{cell.text}"
           next if cell.text.blank?
           date = date_for_column_index[index]
           if date.nil?
@@ -62,18 +64,20 @@ class Scraper
             next
           end
 
-          start_time_of_day, end_time_of_day = begin
-            @time_range_parser.parse(cell.text)
-          rescue ArgumentError => e
-            logger.warn("Could not parse time range: #{cell.text}")
+          cell.to_html.split("<br>").each do |time_range_text|
+            start_time_of_day, end_time_of_day = begin
+              @time_range_parser.parse(time_range_text)
+            rescue ArgumentError => e
+              logger.warn("Could not parse time range: #{cell.text}")
+            end
+
+            entry = ScheduleEntry.new(activity_name,
+              # gross!
+              Time.zone.parse("#{date.to_s(:db)} #{start_time_of_day}"),
+              Time.zone.parse("#{date.to_s(:db)} #{end_time_of_day}"))
+
+            schedule_entries << entry
           end
-
-          entry = ScheduleEntry.new(activity_name,
-            # gross!
-            Time.zone.parse("#{date.to_s(:db)} #{start_time_of_day}"),
-            Time.zone.parse("#{date.to_s(:db)} #{end_time_of_day}"))
-
-          schedule_entries << entry
         end
       end
     end
