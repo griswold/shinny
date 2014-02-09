@@ -17,9 +17,6 @@ class ScraperTest < ActiveSupport::TestCase
 
   def test_handles_multiple_times_in_one_cell
     entries = @scraper.extract_schedule_entries(rink_activity_table)
-    entries.each do |entry|
-      puts entry
-    end
     assert_contains_instance "Public Skate", "2014-02-12 09:00:00", "2014-02-12 12:00:00", entries
     assert_contains_instance "Public Skate", "2014-02-12 15:00:00", "2014-02-12 17:00:00", entries
   end
@@ -42,11 +39,16 @@ class ScraperTest < ActiveSupport::TestCase
       se.start_time == strftime(start_time) &&
       se.end_time == strftime(end_time)
     end
-    assert matches, "Expected to find #{name} from #{start_time_str} to #{end_time_str} but didn't!"
+    entries_with_same_label = schedule_entries.select{ |e| e.label == name }.sort_by(&:start_time)
+    assert matches, <<-EOD
+      Expected to find #{name} from #{start_time_str} to #{end_time_str} but didn't!"
+        matches with same label:
+        #{entries_with_same_label.map(&:to_s).join("\n")}
+    EOD
   end
 
   def strftime(time)
-    time.strftime("%Y%mm%dd %HH:%MM:%SS")
+    time.strftime("%Y-%m-%d %H:%M:%S")
   end
 
 end
