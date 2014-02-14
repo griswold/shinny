@@ -1,5 +1,3 @@
-<h1><%= @activity.name %></h1>
-
 <div class="panel">
   <form data-auto-submit="1" action="<%= scheduled_activities_path %>" method="GET">
     <p>
@@ -29,7 +27,7 @@
 
     </p>
 
-    <p>
+    <p style="display:none;">
       <%= submit_tag "Update" %>
     </p>
 
