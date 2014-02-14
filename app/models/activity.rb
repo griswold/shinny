@@ -5,11 +5,15 @@ class Activity < ActiveRecord::Base
   end
 
   def self.recognize(string)
-    arg_words = string.squish.downcase.split(/\s+/)
+    arg_words = extract_words(string)
     all.map do |activity|
-      words = activity.name.squish.downcase.split(/\s+/)
+      words = extract_words(activity.name)
       [activity, (words & arg_words).size]
     end.sort_by(&:last).last.try(:first)
+  end
+
+  def self.extract_words(str)
+    str.gsub(/[^\w\s]/, "").squish.downcase.split(/\s+/)
   end
 
 end

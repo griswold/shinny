@@ -35,4 +35,8 @@ class ScheduledActivity < ActiveRecord::Base
     rink.address
   end
 
+  def to_s
+    "#{activity.name} @ #{rink.name} : #{start_time} - #{end_time}"
+  end
+
 end
