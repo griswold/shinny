@@ -12,7 +12,7 @@ class ScheduledActivity < ActiveRecord::Base
   geocoded_by :address
 
   def self.conflict_exists?(activity)
-    where(rink: activity.rink, start_time: activity.start_time..activity.end_time).any?
+    where(rink: activity.rink, start_time: activity.start_time..activity.end_time, original_label: activity.original_label).any?
   end
 
   def gender_text
