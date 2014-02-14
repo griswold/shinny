@@ -1,7 +1,7 @@
 <h1><%= @activity.name %></h1>
 
 <div class="panel">
-  <form action="<%= scheduled_activities_path %>" method="GET">
+  <form data-auto-submit="1" action="<%= scheduled_activities_path %>" method="GET">
     <p>
       <%= label_tag "activity_id", "What do you want do?" %>
       <%= select_tag("activity_id", options_from_collection_for_select(@activities, "id", "name", @activity.id)) %>

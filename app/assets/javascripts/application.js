@@ -14,3 +14,9 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+$(function() {
+  $('form[data-auto-submit] :input').change(function() {
+    $(this).closest("form").submit();
+  });
+});
