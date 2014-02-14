@@ -12,7 +12,7 @@
     </p>
     <p>
       <%= label_tag "time", "When?" %>
-      <%= text_field_tag "date", @date %>
+      <%= text_field_tag "date", @date.strftime("%m/%d/%Y"), :"data-provide" => "datepicker", :"data-date-format" => "mm/dd/yyyy", :"data-date-autoclose" => true %>
     </p>
     <p>
       <%= label_tag "gender", "Gender" %>
