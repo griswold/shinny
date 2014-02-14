@@ -1,12 +1,12 @@
 class ScheduledActivitiesController < ApplicationController
+
+  before_filter :set_location
+
   def index
-    @location = params[:location] || "Toronto, ON"
+    start_time = params[:date].present? ? Date.parse(params[:date]) : Date.today.beginning_of_day
+    end_time = start_time.end_of_day
 
-    @date = params[:date].present? ? Date.parse(params[:date]) : Date.current
-    @time = params[:time].present? ? Time.parse(params[:time]) : Time.zone.now
-
-    start_time = Time.zone.local(@date.year, @date.month, @date.day, @time.hour, @time.min, @time.sec)
-    end_time = start_time + 24.hours
+    @date = start_time.to_date
 
     @gender = params[:gender] if params[:gender].present?
     @age = params[:age].to_i if params[:age].present?
@@ -17,17 +17,20 @@ class ScheduledActivitiesController < ApplicationController
 
     @scheduled_activities = ScheduledActivity.where(end_time: start_time..end_time,
                                                     activity: @activity)
-                                             .order("start_time asc")
                                              .limit(20)
+                                             .near(@location, @distance || 50, :units => :km)
                                              .includes(:rink, :activity)
+                                             .order("distance asc, start_time asc")
     @scheduled_activities = @scheduled_activities.where("gender = ? or gender is null", @gender) if @gender
     if @age
       @scheduled_activities = @scheduled_activities.where("start_age is null or start_age <= ?", @age)
       @scheduled_activities = @scheduled_activities.where("end_age is null or end_age >= ?", @age)
     end
 
-    if @distance
-      @scheduled_activities = @scheduled_activities.near(@location, @distance, :units => :km)
-    end
+  end
+
+  def set_location
+    @location = params[:location] || cookies[:location] || "Toronto, ON"
+    cookies[:location] = @location
   end
 end
