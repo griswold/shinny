@@ -3,7 +3,7 @@ class ScheduledActivitiesController < ApplicationController
   before_filter :set_location
 
   def index
-    start_time = params[:date].present? ? Date.parse(params[:date]) : Date.today.beginning_of_day
+    start_time = params[:date].present? ? Time.zone.parse(params[:date]) : Time.zone.today.beginning_of_day
     end_time = start_time.end_of_day
 
     @date = start_time.to_date
