@@ -13,13 +13,16 @@
 
 ActiveRecord::Schema.define(version: 20140209223405) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "activities", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "activities", ["name"], name: "index_activities_on_name", unique: true
+  add_index "activities", ["name"], name: "index_activities_on_name", unique: true, using: :btree
 
   create_table "cached_geocodings", force: true do |t|
     t.string   "text"
@@ -28,7 +31,7 @@ ActiveRecord::Schema.define(version: 20140209223405) do
     t.text     "response"
   end
 
-  add_index "cached_geocodings", ["text"], name: "index_cached_geocodings_on_text", unique: true
+  add_index "cached_geocodings", ["text"], name: "index_cached_geocodings_on_text", unique: true, using: :btree
 
   create_table "rinks", force: true do |t|
     t.string   "name"
@@ -40,7 +43,7 @@ ActiveRecord::Schema.define(version: 20140209223405) do
     t.string   "address"
   end
 
-  add_index "rinks", ["name"], name: "index_rinks_on_name", unique: true
+  add_index "rinks", ["name"], name: "index_rinks_on_name", unique: true, using: :btree
 
   create_table "scheduled_activities", force: true do |t|
     t.integer  "rink_id"
@@ -57,6 +60,6 @@ ActiveRecord::Schema.define(version: 20140209223405) do
     t.decimal  "longitude"
   end
 
-  add_index "scheduled_activities", ["start_time"], name: "index_scheduled_activities_on_start_time"
+  add_index "scheduled_activities", ["start_time"], name: "index_scheduled_activities_on_start_time", using: :btree
 
 end
