@@ -33,10 +33,12 @@ class ScheduleEntryProcessor
 
   def get_start_and_end_age(label)
     case label
-    when /(\d+).*?(\d+)/
+    when /(\d+)\D+(\d+)/
       [$1, $2].map(&:to_i)
     when /^\D+up\s+to\s+(\d+)/
       [nil, $1.to_i]
+    when /(\d+).*and\s(over|up)/
+      [$1.to_i, nil]
     end
   end
 

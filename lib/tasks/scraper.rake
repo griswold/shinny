@@ -6,7 +6,10 @@ namespace :scraper do
   end
 
   desc "synchronizes a rink"
-  task :update_rink_details, [:rink_id] => :environment do |t, args|
+  task :update_rink_details, [:rink_id, :clear] => :environment do |t, args|
+    if args.clear.present?
+      Rink.find(args.rink_id).scheduled_activities.destroy_all
+    end
     Scraper.new.update_rink_details(args.rink_id) 
   end
 
