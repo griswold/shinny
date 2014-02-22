@@ -15,22 +15,6 @@ class ScheduledActivity < ActiveRecord::Base
     where(rink: activity.rink, start_time: activity.start_time..activity.end_time, original_label: activity.original_label).any?
   end
 
-  def gender_text
-    { MALE => "Male only", FEMALE => "Female only" }[gender]
-  end
-
-  def age_range_text
-    if start_age && end_age
-      "Ages " + [start_age, end_age].join(" - ")
-    elsif start_age
-      "Ages #{start_age}+"
-    elsif end_age
-      "Up to age #{end_age}"
-    else
-      nil
-    end
-  end
-
   def address
     rink.address
   end
