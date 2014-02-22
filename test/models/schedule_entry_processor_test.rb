@@ -29,6 +29,12 @@ class ScheduleEntryProcessorTest < ActiveSupport::TestCase
     assert_nil sa.gender
   end
 
+  def test_max_age
+    sa = @under_test.process(@rink, entry("Shinny: Caregiver & Child (up to 8yrs)"))
+    assert_nil sa.start_age
+    assert_equal 8, sa.end_age
+  end
+
   private
 
   def entry(label, start_time=Time.now, end_time=Time.now)

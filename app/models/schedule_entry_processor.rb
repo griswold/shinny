@@ -32,8 +32,12 @@ class ScheduleEntryProcessor
   end
 
   def get_start_and_end_age(label)
-    matches = /(\d+).*?(\d+)/.match(label)
-    matches && matches[1..2].compact.map(&:to_i)
+    case label
+    when /(\d+).*?(\d+)/
+      [$1, $2].map(&:to_i)
+    when /^\D+up\s+to\s+(\d+)/
+      [nil, $1.to_i]
+    end
   end
 
 end
