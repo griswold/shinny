@@ -8,6 +8,7 @@ class ScheduledActivity < ActiveRecord::Base
 
   validates :gender, inclusion: { in: [MALE, FEMALE, nil] }
   validates :activity, :rink, :start_time, :end_time, presence: true
+  before_save :denormalize_lat_lon
 
   geocoded_by :address
 
@@ -21,6 +22,15 @@ class ScheduledActivity < ActiveRecord::Base
 
   def to_s
     "#{activity.name} @ #{rink.name} : #{start_time} - #{end_time}"
+  end
+
+  private
+
+  def denormalize_lat_lon
+    if rink
+      self.latitude = rink.latitude
+      self.longitude = rink.longitude
+    end
   end
 
 end

@@ -14,9 +14,7 @@ class ScheduleEntryProcessor
                           original_label: entry.label,
                           gender: detect_gender(entry.label),
                           start_time: entry.start_time,
-                          end_time: entry.end_time,
-                          latitude: rink.latitude,
-                          longitude: rink.longitude
+                          end_time: entry.end_time
   end
 
   private
