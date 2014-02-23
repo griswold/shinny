@@ -1,6 +1,6 @@
 require "open-uri"
 
-class Scraper
+class TorontoCityRinkScraper
 
   HOST = "http://www1.toronto.ca"
 
