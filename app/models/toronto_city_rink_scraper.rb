@@ -32,7 +32,8 @@ class TorontoCityRinkScraper
 
   def load_rinks
     logger.info "Updating rinks"
-    schedule = Nokogiri::HTML(fetch_full_schedule)
+    rink_list_html = fetch("#{HOST}/parks/prd/skating/dropin/hockey/", "Rink list")
+    schedule = Nokogiri::HTML(rink_list_html)
     created = 0
     links = schedule.css(".pfrProgramDescrList.dropinbox h4 a")
     rinks = []
@@ -52,12 +53,12 @@ class TorontoCityRinkScraper
   end
 
   def update_rink_details(rink)
-    raw_rink_detail_page = open(rink.url){ |f| f.read }
+    raw_rink_detail_page = fetch(rink.url, "Rink details for #{rink.name}")
     rink_detail_page = Nokogiri::HTML(raw_rink_detail_page)
 
     rink_location = rink_detail_page.css(".pfrComplexLocation li:first").text
-    logger.debug "Address for #{rink.name} is #{rink_location}"
     geocode_result = Geocoder.search(rink_location).first
+    logger.debug "Address for #{rink.name} is #{rink_location}: #{geocode_result.try(:latitude)}, #{geocode_result.try(:longitude)}"
 
     if geocode_result
       rink.update_attributes(address: rink_location, latitude: geocode_result.latitude, longitude: geocode_result.longitude)
@@ -67,12 +68,15 @@ class TorontoCityRinkScraper
 
     schedule = rink_detail_page.css("#pfrComplexTabs-dropin").to_html
     schedule_entries = extract_schedule_entries(schedule)
+
+    logger.info("#{rink.name}: extracted #{schedule_entries.size} entries")
+
     schedule_entries.each do |entry|
       scheduled_activity = @schedule_entry_processor.process(rink, entry)
       if ScheduledActivity.conflict_exists?(scheduled_activity)
-        Rails.logger.debug("Already have activity for this slot...skipping #{scheduled_activity}")
+        logger.debug("Already have activity for this slot...skipping #{scheduled_activity}")
       elsif !scheduled_activity.save
-        Rails.logger.error("Error saving activity: #{scheduled_activity}: #{scheduled_activity.errors.full_messages}")
+        logger.error("Error saving activity: #{scheduled_activity}: #{scheduled_activity.errors.full_messages}")
       end
     end
   end
@@ -132,16 +136,16 @@ class TorontoCityRinkScraper
 
   private
 
-  def fetch_full_schedule
-    @schedule_html ||= begin
-      url = "#{HOST}/parks/prd/skating/dropin/hockey/"
-      logger.info("Fetching schedule from #{url}")
-      open(url){ |f| f.read }
-    end
-  end
-
   def logger
     self.class.logger
+  end
+
+  def fetch(url, description=nil)
+    start = Time.now
+    logger.info "fetching #{description} from #{url}"
+    open(url){ |f| f.read }.tap do
+      logger.info "completed in #{Time.now - start}s"
+    end
   end
 
 end
