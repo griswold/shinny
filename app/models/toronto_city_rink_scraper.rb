@@ -3,34 +3,60 @@ require "open-uri"
 class TorontoCityRinkScraper
 
   HOST = "http://www1.toronto.ca"
+  cattr_accessor :logger
+  self.logger = Rails.logger
 
-  def initialize
+  # seems like there may be a throttling mechanism on the rink sites,
+  # requests fail if you do too many too quickly
+  DEFAULT_SLEEP_SECONDS = 20
+
+  def initialize(opts={})
+    @sleep_seconds = opts[:sleep_seconds]
+    @rink_ids = opts[:rink_ids]
     @time_range_parser = TimeRangeParser.new
     @schedule_entry_processor = ScheduleEntryProcessor.new
   end
 
-  def update_rinks
+  def execute(opts={})
+    rinks = load_rinks
+    rinks.each_with_index do |rink, index|
+      next if @rink_ids && !@rink_ids.include?(rink.id)
+
+      update_rink_details(rink)
+      if @sleep_seconds && index + 1 < rinks.size
+        logger.info "Sleeping for #{@sleep_seconds}"
+        sleep @sleep_seconds
+      end
+    end
+  end
+
+  def load_rinks
+    logger.info "Updating rinks"
     schedule = Nokogiri::HTML(fetch_full_schedule)
     created = 0
     links = schedule.css(".pfrProgramDescrList.dropinbox h4 a")
+    rinks = []
+
     links.each do |link|
       rink_name = link.text.squish
       rink = Rink.find_by_name(rink_name)
       if rink.nil?
         logger.info "\t=> Creating rink: #{rink_name}"
-        Rink.create!(name: rink_name, url: HOST + link.attr("href"))
+        rink = Rink.create!(name: rink_name, url: HOST + link.attr("href"))
         created += 1
       end
+      rinks << rink
     end
     logger.info "Processed #{links.size} rinks. Created #{created}"
+    rinks
   end
 
-  def update_rink_details(rink_id)
-    rink = Rink.find(rink_id)
+  def update_rink_details(rink)
     raw_rink_detail_page = open(rink.url){ |f| f.read }
     rink_detail_page = Nokogiri::HTML(raw_rink_detail_page)
 
     rink_location = rink_detail_page.css(".pfrComplexLocation li:first").text
+    logger.debug "Address for #{rink.name} is #{rink_location}"
     geocode_result = Geocoder.search(rink_location).first
 
     if geocode_result
@@ -44,7 +70,7 @@ class TorontoCityRinkScraper
     schedule_entries.each do |entry|
       scheduled_activity = @schedule_entry_processor.process(rink, entry)
       if ScheduledActivity.conflict_exists?(scheduled_activity)
-        Rails.logger.info("Already have activity for this slot...skipping #{scheduled_activity}")
+        Rails.logger.debug("Already have activity for this slot...skipping #{scheduled_activity}")
       elsif !scheduled_activity.save
         Rails.logger.error("Error saving activity: #{scheduled_activity}: #{scheduled_activity.errors.full_messages}")
       end
@@ -115,7 +141,7 @@ class TorontoCityRinkScraper
   end
 
   def logger
-    Rails.logger
+    self.class.logger
   end
 
 end
