@@ -1,9 +1,9 @@
 require 'test_helper'
 
-class ScraperTest < ActiveSupport::TestCase
+class TorontoCityRinkScraperTest < ActiveSupport::TestCase
 
   def setup
-    @scraper = Scraper.new
+    @scraper = TorontoCityRinkScraper.new
   end
 
   def test_extract_schedule_entries
