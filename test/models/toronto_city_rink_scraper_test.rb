@@ -40,8 +40,4 @@ class TorontoCityRinkScraperTest < ActiveSupport::TestCase
     EOD
   end
 
-  def strftime(time)
-    time.strftime("%Y-%m-%d %H:%M:%S")
-  end
-
 end
