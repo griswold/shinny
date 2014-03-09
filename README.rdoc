@@ -1,28 +1,15 @@
-== README
+# Shinny
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+If you live in Toronto and just want to play some pickup hockey at one of the public
+rinks near you, it takes a bit too long to figure out where you can play and when. You have 
+to pull up the schedule for each rink, find where they list the pickup schedule, and
+look through this table.
 
-Things you may want to cover:
+No longer! Just open this app and you're done.
 
-* Ruby version
+## Develpoment
+To set up the app:
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+    rake db:create db:migrate
+    rake scraper:toronto_rinks     # scrapes the data from the rink pages
+    rails s
