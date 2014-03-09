@@ -6,15 +6,28 @@ class TorontoCityRinkScraper
   cattr_accessor :logger
   self.logger = Rails.logger
 
+  attr_accessor :fetcher
+
   # seems like there may be a throttling mechanism on the rink sites,
   # requests fail if you do too many too quickly
   DEFAULT_SLEEP_SECONDS = 20
+
+  class Fetcher
+    def fetch(url, description=nil)
+      start = Time.now
+      logger.info "fetching #{description} from #{url}"
+      open(url){ |f| f.read }.tap do
+        logger.info "completed in #{Time.now - start}s"
+      end
+    end
+  end
 
   def initialize(opts={})
     @sleep_seconds = opts[:sleep_seconds]
     @rink_ids = opts[:rink_ids]
     @time_range_parser = TimeRangeParser.new
     @schedule_entry_processor = ScheduleEntryProcessor.new
+    @fetcher = Fetcher.new
   end
 
   def execute(opts={})
@@ -141,11 +154,7 @@ class TorontoCityRinkScraper
   end
 
   def fetch(url, description=nil)
-    start = Time.now
-    logger.info "fetching #{description} from #{url}"
-    open(url){ |f| f.read }.tap do
-      logger.info "completed in #{Time.now - start}s"
-    end
+    @fetcher.fetch(url, description)
   end
 
 end
