@@ -15,6 +15,7 @@ class TorontoCityRinkScraper
   class Fetcher
     def fetch(url, description=nil)
       start = Time.now
+      logger = TorontoCityRinkScraper.logger
       logger.info "fetching #{description} from #{url}"
       open(url){ |f| f.read }.tap do
         logger.info "completed in #{Time.now - start}s"
