@@ -7,25 +7,20 @@ class ScheduledActivitiesController < ApplicationController
     end_time = start_time.end_of_day
 
     @date = start_time.to_date
-
     @gender = params[:gender] if params[:gender].present?
     @age = params[:age].to_i if params[:age].present?
     @distance = params[:distance].to_i if params[:distance].present?
-
     @activity = params[:activity_id].present? ? Activity.find(params[:activity_id]) : Activity.default
     @activities = Activity.all
 
-    @scheduled_activities = ScheduledActivity.where(end_time: start_time..end_time,
-                                                    activity: @activity)
-                                             .limit(20)
-                                             .near(@location, @distance || 50, :units => :km)
-                                             .includes(:rink, :activity)
-                                             .order("distance asc, start_time asc")
-    @scheduled_activities = @scheduled_activities.where("gender = ? or gender is null", @gender) if @gender
-    if @age
-      @scheduled_activities = @scheduled_activities.where("start_age is null or start_age <= ?", @age)
-      @scheduled_activities = @scheduled_activities.where("end_age is null or end_age >= ?", @age)
-    end
+    @scheduled_activities = ScheduledActivity.search start_time: start_time,
+                                                     end_time: end_time,
+                                                     activity: @activity,
+                                                     limit: 20,
+                                                     location: @location,
+                                                     age: @age,
+                                                     gender: @gender,
+                                                     distance: @distance
 
     respond_to do |format|
       format.html
