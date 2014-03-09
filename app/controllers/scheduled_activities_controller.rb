@@ -27,6 +27,10 @@ class ScheduledActivitiesController < ApplicationController
       @scheduled_activities = @scheduled_activities.where("end_age is null or end_age >= ?", @age)
     end
 
+    respond_to do |format|
+      format.html
+      format.json { render json: @scheduled_activities.to_json(include: :rink) }
+    end
   end
 
   def set_location
