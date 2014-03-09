@@ -1,4 +1,4 @@
-# Shinny
+= Shinny
 
 If you live in Toronto and just want to play some pickup hockey at one of the public
 rinks near you, it takes a bit too long to figure out where you can play and when. You have 
@@ -7,7 +7,7 @@ look through this table.
 
 No longer! Just open this app and you're done.
 
-## Develpoment
+== Develpoment
 To set up the app:
 
     rake db:create db:migrate
