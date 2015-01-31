@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20140209223405) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "activities", force: true do |t|
+  create_table "activities", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20140209223405) do
 
   add_index "activities", ["name"], name: "index_activities_on_name", unique: true, using: :btree
 
-  create_table "cached_geocodings", force: true do |t|
+  create_table "cached_geocodings", force: :cascade do |t|
     t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20140209223405) do
 
   add_index "cached_geocodings", ["text"], name: "index_cached_geocodings_on_text", unique: true, using: :btree
 
-  create_table "rinks", force: true do |t|
+  create_table "rinks", force: :cascade do |t|
     t.string   "name"
     t.decimal  "latitude"
     t.decimal  "longitude"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20140209223405) do
 
   add_index "rinks", ["name"], name: "index_rinks_on_name", unique: true, using: :btree
 
-  create_table "scheduled_activities", force: true do |t|
+  create_table "scheduled_activities", force: :cascade do |t|
     t.integer  "rink_id"
     t.integer  "activity_id"
     t.datetime "start_time"
