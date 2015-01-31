@@ -44,11 +44,9 @@
     <tr>
       <td>
         <%= link_to activity.rink.name, activity.rink.url, target: "_blank" %>
-        <span class="secondary"><%= number_with_precision(activity.distance, precision: 1) %>km</span>
       </td>
       <td>
-        <%= activity.start_time.strftime("%b %-d %-I:%M%P") %> - <%= activity.end_time.strftime("%-I:%M%P") %>
-      </td>
+        <%= format_activity_time(activity.start_time, activity.end_time) %>
       <td class="secondary"> <%= activity.original_label %> </td>
     </tr>
   <% end %>
