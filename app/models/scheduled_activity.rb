@@ -4,7 +4,6 @@ class ScheduledActivity < ActiveRecord::Base
 
   MALE = "M"
   FEMALE = "F"
-  DEFAULT_LOCATION = "Toronto, ON"
 
   belongs_to :activity
   belongs_to :rink
