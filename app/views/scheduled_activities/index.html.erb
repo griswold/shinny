@@ -19,7 +19,7 @@
       <%= f.select :gender, [["", nil], ["Male only", ScheduledActivity::MALE], ["Female only", ScheduledActivity::FEMALE]] %>
     </p>
     <p>
-      <%= f.label :distance %>
+      <%= f.label :distance, "Distance (km)" %>
       <%= f.text_field :distance %>
     </p>
     <p>
