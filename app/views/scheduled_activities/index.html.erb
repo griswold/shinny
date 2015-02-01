@@ -27,6 +27,10 @@
       <%= f.text_field :age %>
     </p>
     <p>
+      <%= f.label :remember, "Remember this for next time" %>
+      <%= f.check_box :remember %>
+    </p>
+    <p>
       <%= f.submit "Update" %>
     </p>
   <% end %>

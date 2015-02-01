@@ -1,11 +1,13 @@
 class ScheduledActivitiesController < ApplicationController
 
-  before_filter :set_location
+  after_filter :remember_search_params_for_next_time
 
   def index
     @activities = Activity.all
 
-    @search = Search.new(params[:search])
+    search_params = params[:search] || session[:search] || {}
+
+    @search = Search.new(search_params)
 
     @scheduled_activities = ScheduledActivity.search(@search)
 
@@ -15,8 +17,11 @@ class ScheduledActivitiesController < ApplicationController
     end
   end
 
-  def set_location
-    @location = params[:location] || cookies[:location] || "Toronto, ON"
-    cookies[:location] = @location
+  private
+
+  def remember_search_params_for_next_time
+    if @search.remember?
+      session[:search] = @search.to_remember
+    end
   end
 end
