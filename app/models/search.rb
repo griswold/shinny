@@ -17,7 +17,7 @@ class Search
   end
 
   def end_time
-    start_time.end_of_day
+    start_time + 24.hours
   end
 
   def activity
