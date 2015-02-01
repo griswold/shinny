@@ -45,7 +45,7 @@
   <% @scheduled_activities.each do |activity| %>
     <tr>
       <td>
-        <%= link_to activity.rink.name, activity.rink.url, target: "_blank" %>
+        <%= link_to activity.rink.name, rink_path(activity.rink) %>
       </td>
       <td>
         <%= format_activity_time(activity.start_time, activity.end_time) %>
