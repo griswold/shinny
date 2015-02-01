@@ -5,6 +5,7 @@ class Search
   def initialize(params={})
     super
     cast_int(:age, :distance)
+    @location = "Toronto, ON" if @location.blank?
   end
 
   def start_time

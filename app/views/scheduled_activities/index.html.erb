@@ -1,5 +1,9 @@
 <div class="panel">
-  <%= form_for @search, method: :get, url: scheduled_activities_path, html: { "data-auto-submit" => 1 } do |f| %>
+  <p>
+    <h4 id="search_summary"><%= summarize_search(@search) %></h4>
+    <a id="change_search" href="#">[change]</a>
+  </p>
+  <%= form_for @search, method: :get, url: scheduled_activities_path do |f| %>
     <p>
       <%= f.label :activity_id, "What do you want to do?" %>
       <%= f.select :activity_id do %>
@@ -21,6 +25,9 @@
     <p>
       <%= f.label :age %>
       <%= f.text_field :age %>
+    </p>
+    <p>
+      <%= f.submit "Update" %>
     </p>
   <% end %>
 </div>

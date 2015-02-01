@@ -16,5 +16,12 @@
   font-size: 0.8em;
   color: #999;
   text-decoration: italic;
+}
 
+#new_search {
+  display: none;
+}
+
+#search_summary {
+  display: inline;
 }

@@ -12,11 +12,12 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require_tree .
 
 $(function() {
-  $('form[data-auto-submit] :input').change(function() {
-    $(this).closest("form").submit();
+  $('#change_search').click(function(){ 
+    var form = $('#new_search');
+    form.toggle();
+    $(this).text(form.is(":visible") ? '[hide]' : '[change]');
   });
 });
