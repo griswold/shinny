@@ -13,20 +13,20 @@ class ScheduledActivity < ActiveRecord::Base
 
   geocoded_by :address
 
-  def self.search(opts={})
-    start_time = opts[:start_time] || Time.zone.today.beginning_of_day
-    end_time = opts[:end_time] || start_time.end_of_day
+  def self.search(opts)
+    start_time = opts.start_time || Time.zone.today.beginning_of_day
+    end_time = opts.end_time || start_time.end_of_day
 
     scope = where(end_time: start_time..end_time,
-                  activity: opts[:activity] || Activity.default)
-            .limit(opts[:limit] || 20)
-            .near(opts[:location], @distance || 50, :units => :km)
+                  activity: opts.activity || Activity.default)
+            .limit(opts.limit || 20)
+            .near(opts.location, @distance || 50, :units => :km)
             .includes(:rink, :activity)
             .order("distance asc, start_time asc")
-    scope = scope.where("gender = ? or gender is null", opts[:gender]) if opts[:gender]
-    if opts[:age]
-      scope = scope.where("start_age is null or start_age <= ?", opts[:age])
-      scope = scope.where("end_age is null or end_age >= ?", opts[:age])
+    scope = scope.where("gender = ? or gender is null", opts.gender) if opts.gender
+    if opts.age
+      scope = scope.where("start_age is null or start_age <= ?", opts.age)
+      scope = scope.where("end_age is null or end_age >= ?", opts.age)
     end
     scope
   end

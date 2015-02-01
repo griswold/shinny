@@ -7,14 +7,7 @@ class ScheduledActivitiesController < ApplicationController
 
     @search = Search.new(params[:search])
 
-    @scheduled_activities = ScheduledActivity.search start_time: @search.start_time,
-                                                     end_time: @search.end_time,
-                                                     activity: @search.activity,
-                                                     limit: @search.limit,
-                                                     location: @search.location,
-                                                     age: @search.age,
-                                                     gender: @search.gender,
-                                                     distance: @search.distance
+    @scheduled_activities = ScheduledActivity.search(@search)
 
     respond_to do |format|
       format.html
