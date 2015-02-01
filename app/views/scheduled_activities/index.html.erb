@@ -1,37 +1,28 @@
 <div class="panel">
-  <form data-auto-submit="1" action="<%= scheduled_activities_path %>" method="GET">
+  <%= form_for @search, method: :get, url: scheduled_activities_path, html: { "data-auto-submit" => 1 } do |f| %>
     <p>
-      <%= label_tag "activity_id", "What do you want do?" %>
-      <%= select_tag("activity_id", options_from_collection_for_select(@activities, "id", "name", @activity.id)) %>
-    </p>
-    <p>
-      <%= label_tag "location", "Where?" %>
-      <%= text_field_tag "location", @location %>
+      <%= f.label :activity_id, "What do you want to do?" %>
+      <%= f.select :activity_id do %>
+        <%= options_from_collection_for_select(@activities, "id", "name", @search.activity.id) %>
+      <% end %>
     </p>
     <p>
-      <%= label_tag "time", "When?" %>
-      <%= text_field_tag "date", @date.strftime("%d/%m/%Y"), :"data-provide" => "datepicker", :"data-date-format" => "dd/mm/yyyy", :"data-date-autoclose" => true %>
+      <%= f.label :location, "Where?" %>
+      <%= f.text_field :location %>
     </p>
     <p>
-      <%= label_tag "gender", "Gender" %>
-      <%= select_tag "gender", options_for_select([["", nil], ["Male only", ScheduledActivity::MALE], ["Female only", ScheduledActivity::FEMALE]], @gender) %>
+      <%= f.label :gender %>
+      <%= f.select :gender, [["", nil], ["Male only", ScheduledActivity::MALE], ["Female only", ScheduledActivity::FEMALE]] %>
     </p>
     <p>
-      <%= label_tag "age", "Age" %>
-      <%= text_field_tag "age", @age %>
+      <%= f.label :distance %>
+      <%= f.text_field :distance %>
     </p>
-
     <p>
-      <%= label_tag "distance" %>
-      <%= text_field_tag "distance", @distance %>
-
+      <%= f.label :age %>
+      <%= f.text_field :age %>
     </p>
-
-    <p style="display:none;">
-      <%= submit_tag "Update" %>
-    </p>
-
-  </form>
+  <% end %>
 </div>
 
 <table class="table">
