@@ -5,5 +5,6 @@ class RinksController < ApplicationController
 
   def show
     @rink = Rink.find(params[:id])
+    @scheduled_activities = @rink.scheduled_activities.today
   end
 end

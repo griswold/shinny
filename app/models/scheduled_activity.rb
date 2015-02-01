@@ -1,5 +1,7 @@
 class ScheduledActivity < ActiveRecord::Base
 
+  scope :today, -> { where(start_time: Date.today.beginning_of_day..Date.today.end_of_day).order(:start_time) }
+
   MALE = "M"
   FEMALE = "F"
   DEFAULT_LOCATION = "Toronto, ON"
