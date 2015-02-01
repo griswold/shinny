@@ -21,7 +21,7 @@ class ScheduledActivity < ActiveRecord::Base
     scope = where(end_time: start_time..end_time,
                   activity: opts.activity || Activity.default)
             .limit(opts.limit || 20)
-            .near(opts.location, @distance || 50, :units => :km)
+            .near(opts.location, opts.distance || 50, :units => :km)
             .includes(:rink, :activity)
             .order("distance asc, start_time asc")
     scope = scope.where("gender = ? or gender is null", opts.gender) if opts.gender
