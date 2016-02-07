@@ -11,13 +11,15 @@
 </div>
 
 <h2>Happening today</h2>
-<table class="table">
-  <tr><th>Activity</th><th>Time</th></tr>
+<ul class="list-group">
   <% @scheduled_activities.each do |activity| %>
-    <tr>
-      <td><%= activity.original_label %></td>
-      <td class="<%= 'secondary' if activity.end_time < Time.now.utc %>"><%= format_activity_time(activity.start_time, activity.end_time) %></td>
-    </tr>
+    <li class="list-group-item">
+      <h4 class="list-group-item-heading"><%= activity.original_label %></h4>
+      <p class="list-group-item-text">
+        <span class="<%= 'secondary' if activity.end_time < Time.now.utc %>">
+          <%= format_activity_time(activity.start_time, activity.end_time) %>
+        </span>
+    </li>
 
   <% end %>
-</table>
+</ul>

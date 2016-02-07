@@ -36,21 +36,14 @@
   <% end %>
 </div>
 
-<table class="table">
-  <tr>
-    <th>Rink</th>
-    <th>Time</th>
-    <th>Description</th>
-  </tr>
+<div class="list-group">
   <% @scheduled_activities.each do |activity| %>
-    <tr>
-      <td>
-        <%= link_to activity.rink.name, rink_path(activity.rink) %>
-      </td>
-      <td>
-        <%= format_activity_time(activity.start_time, activity.end_time) %>
-      <td class="secondary"> <%= activity.original_label %> </td>
-    </tr>
+    <a class="list-group-item" href="<%= rink_path(activity.rink) %>">
+      <h4 class="list-group-item-heading"><%= activity.rink.name %></h4>
+      <p class="list-group-item-text">
+          <strong><%= format_activity_time(activity.start_time, activity.end_time) %></strong>:
+          <%= activity.original_label %>
+      </p>
+    </a>
   <% end %>
-
-</table>
+</div>
