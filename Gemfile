@@ -29,3 +29,7 @@ gem "geocoder"
 group :development do
   gem "guard-test"
 end
+
+group :test do
+  gem "mocha"
+end

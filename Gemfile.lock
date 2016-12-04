@@ -87,10 +87,13 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (2.99)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
+    mocha (1.2.1)
+      metaclass (~> 0.0.1)
     multi_json (1.11.2)
     nenv (0.2.0)
     nokogiri (1.6.7.2)
@@ -173,6 +176,7 @@ DEPENDENCIES
   guard-test
   jbuilder (~> 1.2)
   jquery-rails
+  mocha
   nokogiri (~> 1.6.7.2)
   pg
   rails (~> 4.2)
