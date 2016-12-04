@@ -14,8 +14,8 @@ class TorontoCityRinkScraperTest < ActiveSupport::TestCase
 
   def test_handles_multiple_times_in_one_cell
     entries = @scraper.extract_schedule_entries(rink_activity_table)
-    assert_contains_entry "Public Skate", "2014-02-12 09:00:00", "2014-02-12 12:00:00", entries
-    assert_contains_entry "Public Skate", "2014-02-12 15:00:00", "2014-02-12 17:00:00", entries
+    assert_contains_entry "Pickup Hockey (19yrs and over)", "2016-12-09 10:00:00", "2014-12-09 12:00:00", entries
+    assert_contains_entry "Pickup Hockey (19yrs and over)", "2016-12-09 14:00:00", "2016-12-09 16:00:00", entries
   end
 
   private

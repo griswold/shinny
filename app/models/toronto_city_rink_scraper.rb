@@ -127,7 +127,7 @@ class TorontoCityRinkScraper
             next
           end
 
-          cell.to_html.split("<br>").each do |time_range_text|
+          cell.to_html.split("<hr>").each do |time_range_text|
             start_time_of_day, end_time_of_day = begin
               @time_range_parser.parse(time_range_text)
             rescue ArgumentError => e
