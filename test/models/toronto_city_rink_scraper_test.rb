@@ -18,6 +18,10 @@ class TorontoCityRinkScraperTest < ActiveSupport::TestCase
     assert_contains_entry "Pickup Hockey (19yrs and over)", "2016-12-09 14:00:00", "2016-12-09 16:00:00", entries
   end
 
+  def test_extract_address
+    assert_equal "31 Glen Watford Dr M1S 2B7", @scraper.extract_rink_address(rink_detail_page)
+  end
+
   private
 
   def rink_detail_page

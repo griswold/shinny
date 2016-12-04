@@ -66,11 +66,16 @@ class TorontoCityRinkScraper
     rinks
   end
 
+  def extract_rink_address(rink_detail_page_html)
+    rink_detail_page = Nokogiri::HTML(rink_detail_page_html)
+    rink_detail_page.css(".addressbar .badge").text.squish.gsub(/\s*map it/i, '')
+  end
+
   def update_rink_details(rink)
     raw_rink_detail_page = fetch(rink.url, "Rink details for #{rink.name}")
     rink_detail_page = Nokogiri::HTML(raw_rink_detail_page)
 
-    rink_location = rink_detail_page.css(".pfrComplexLocation li:first").text
+    rink_location = extract_rink_address(raw_rink_detail_page)
     geocode_result = Geocoder.search(rink_location).first
     logger.debug "Address for #{rink.name} is #{rink_location}: #{geocode_result.try(:latitude)}, #{geocode_result.try(:longitude)}"
 
